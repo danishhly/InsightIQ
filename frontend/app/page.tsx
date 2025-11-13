@@ -17,10 +17,10 @@ export default function Home() {
   }, [isAuthenticated, router]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'hsl(220, 26%, 6%)' }}>
       <div className="text-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-        <p className="mt-4 text-gray-600">Loading...</p>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 mx-auto" style={{ borderColor: 'hsl(199, 89%, 48%)' }}></div>
+        <p className="mt-4" style={{ color: 'hsl(215, 20%, 65%)' }}>Loading...</p>
       </div>
     </div>
   );
