@@ -1,15 +1,44 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0f0f23;
-  --foreground: #ffffff;
-  --card-bg: #1a1a2e;
-  --card-border: #2a2a3e;
-  --sidebar-bg: #0a0a1a;
-  --text-primary: #ffffff;
-  --text-secondary: #a0a0b0;
-  --accent: #6366f1;
-  --accent-hover: #818cf8;
+  /* Dark Theme Base */
+  --background: hsl(220, 26%, 6%);
+  --foreground: hsl(210, 40%, 98%);
+  
+  /* Card Components */
+  --card-bg: hsl(220, 20%, 10%);
+  --card-foreground: hsl(210, 40%, 98%);
+  
+  /* Primary Brand Color */
+  --primary: hsl(199, 89%, 48%);
+  --primary-foreground: hsl(220, 26%, 6%);
+  
+  /* Secondary Colors */
+  --secondary: hsl(220, 20%, 14%);
+  --secondary-foreground: hsl(210, 40%, 98%);
+  
+  /* Muted/Subtle Elements */
+  --muted: hsl(220, 20%, 14%);
+  --muted-foreground: hsl(215, 20%, 65%);
+  
+  /* Accent */
+  --accent: hsl(199, 89%, 48%);
+  --accent-foreground: hsl(220, 26%, 6%);
+  
+  /* Borders & Inputs */
+  --border: hsl(220, 20%, 18%);
+  --input-border: hsl(220, 20%, 18%);
+  --focus-ring: hsl(199, 89%, 48%);
+  
+  /* Destructive/Error */
+  --destructive: hsl(0, 84%, 60%);
+  --destructive-foreground: hsl(210, 40%, 98%);
+  
+  /* Border Radius */
+  --radius: 0.75rem;
+  
+  /* Transitions */
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 * {
@@ -33,14 +62,20 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--sidebar-bg);
+  background: hsl(220, 20%, 10%);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--card-border);
+  background: hsl(220, 20%, 18%);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #3a3a4e;
+  background: hsl(220, 20%, 25%);
+}
+
+/* Input placeholder styling */
+input::placeholder {
+  color: hsl(215, 20%, 65%);
+  opacity: 0.6;
 }
