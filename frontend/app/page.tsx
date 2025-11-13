@@ -1,75 +1,16 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useAuthStore } from '@/lib/store/authStore';
-import Navigation from '@/components/Navigation';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Sparkles, Mail, Lock, User } from 'lucide-react';
-import { authApi } from '@/lib/api/auth';
+import { Sparkles } from 'lucide-react';
+import Navigation from '@/components/Navigation';
 
 export default function Home() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const setAuth = useAuthStore((state) => state.setAuth);
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  
-  const [isSignUp, setIsSignUp] = useState(searchParams.get('mode') === 'signup');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string>('');
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      router.push('/dashboard');
-      return;
-    }
-    setIsSignUp(searchParams.get('mode') === 'signup');
-  }, [isAuthenticated, router, searchParams]);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    setIsLoading(true);
-
-    try {
-      if (isSignUp) {
-        const response = await authApi.register({ email, password, name });
-        setAuth(response.user, response.accessToken, response.refreshToken);
-      } else {
-        const response = await authApi.login({ email, password });
-        setAuth(response.user, response.accessToken, response.refreshToken);
-      }
-      router.push('/dashboard');
-    } catch (err: any) {
-      const errorMessage = err.response?.data?.error?.message || 
-        (isSignUp ? 'Registration failed' : 'Login failed');
-      setError(errorMessage);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const toggleMode = () => {
-    const newMode = !isSignUp;
-    setIsSignUp(newMode);
-    router.push(newMode ? '/?mode=signup' : '/');
-  };
-
-  if (isAuthenticated) {
-    return null;
-  }
-
   return (
     <div className="relative min-h-screen" style={{ backgroundColor: 'hsl(220, 26%, 6%)' }}>
       <Navigation />
 
-      {/* Full page background */}
+      {/* Full page background with overlay */}
       <div 
         className="absolute inset-0 opacity-50"
         style={{
@@ -83,149 +24,65 @@ export default function Home() {
         }}
       />
 
-      <div className="relative flex min-h-screen items-center justify-center px-4 pt-16">
-        <Card className="relative w-full max-w-md">
-          <CardHeader className="space-y-1 text-center">
-            <div 
-              className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl"
+      {/* Content */}
+      <div className="relative flex min-h-screen items-center justify-center px-4">
+        <div className="mx-auto max-w-4xl text-center">
+          <h1 className="mb-6 text-6xl font-bold tracking-tight sm:text-7xl md:text-8xl">
+            <span 
+              className="bg-clip-text text-transparent block"
               style={{
-                background: 'linear-gradient(135deg, hsl(217, 91%, 60%) 0%, hsl(199, 89%, 48%) 50%, hsl(180, 100%, 50%) 100%)',
-                boxShadow: '0 0 60px hsl(199, 89%, 48% / 0.3)'
+                background: 'linear-gradient(135deg, hsl(217, 91%, 60%) 0%, hsl(199, 89%, 48%) 50%, hsl(180, 100%, 50%) 100%)'
               }}
             >
-              <Sparkles className="h-6 w-6" style={{ color: 'hsl(220, 26%, 6%)' }} />
-            </div>
-            <CardTitle>
-              {isSignUp ? 'Create your account' : 'Welcome back'}
-            </CardTitle>
-            <CardDescription>
-              {isSignUp
-                ? 'Start your free trial today. No credit card required.'
-                : 'Enter your credentials to access your account'}
-            </CardDescription>
-          </CardHeader>
+              AI Business Analyst
+            </span>
+            <span style={{ color: 'hsl(210, 40%, 98%)' }}>
+              Dashboard
+            </span>
+          </h1>
 
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {error && (
-                <div 
-                  className="px-4 py-3 rounded-lg text-sm"
-                  style={{
-                    backgroundColor: 'hsl(0, 84%, 60% / 0.1)',
-                    borderColor: 'hsl(0, 84%, 60% / 0.3)',
-                    borderWidth: '1px',
-                    color: 'hsl(0, 84%, 60%)'
-                  }}
-                >
-                  {error}
-                </div>
-              )}
+          <p className="mb-10 text-xl" style={{ color: 'hsl(215, 20%, 65%)' }}>
+            Transform your data into actionable insights
+          </p>
 
-              {isSignUp && (
-                <div className="space-y-2">
-                  <Label htmlFor="name">Full Name</Label>
-                  <div className="relative">
-                    <User 
-                      className="absolute left-3 top-3 h-4 w-4" 
-                      style={{ color: 'hsl(215, 20%, 65%)' }} 
-                    />
-                    <Input
-                      id="name"
-                      type="text"
-                      placeholder="John Doe"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      className="pl-10"
-                      required
-                    />
-                  </div>
-                </div>
-              )}
-
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <div className="relative">
-                  <Mail 
-                    className="absolute left-3 top-3 h-4 w-4" 
-                    style={{ color: 'hsl(215, 20%, 65%)' }} 
-                  />
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="you@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="pl-10"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
-                <div className="relative">
-                  <Lock 
-                    className="absolute left-3 top-3 h-4 w-4" 
-                    style={{ color: 'hsl(215, 20%, 65%)' }} 
-                  />
-                  <Input
-                    id="password"
-                    type="password"
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="pl-10"
-                    required
-                    minLength={isSignUp ? 6 : undefined}
-                  />
-                </div>
-              </div>
-
-              {!isSignUp && (
-                <div className="flex items-center justify-end">
-                  <button
-                    type="button"
-                    className="text-sm hover:underline transition-all"
-                    style={{ color: 'hsl(199, 89%, 48%)' }}
-                  >
-                    Forgot password?
-                  </button>
-                </div>
-              )}
-
+          <div className="flex gap-4 justify-center flex-wrap">
+            <Link href="/auth?mode=signup">
               <Button
-                type="submit"
-                className="w-full"
-                disabled={isLoading}
-                variant="primary"
+                size="lg"
+                className="text-base px-8 hover:opacity-90"
+                style={{
+                  background: 'linear-gradient(135deg, hsl(217, 91%, 60%) 0%, hsl(199, 89%, 48%) 50%, hsl(180, 100%, 50%) 100%)',
+                  color: 'hsl(220, 26%, 6%)',
+                  boxShadow: '0 0 60px hsl(199, 89%, 48% / 0.3)',
+                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+                }}
               >
-                {isLoading ? (
-                  'Loading...'
-                ) : isSignUp ? (
-                  <>
-                    <Sparkles className="mr-2 h-4 w-4" />
-                    Create Account
-                  </>
-                ) : (
-                  'Sign In'
-                )}
+                <Sparkles className="mr-2 h-5 w-5" />
+                Get Started
               </Button>
-            </form>
-
-            <div className="mt-6 text-center text-sm">
-              <span style={{ color: 'hsl(215, 20%, 65%)' }}>
-                {isSignUp ? 'Already have an account?' : "Don't have an account?"}
-              </span>{' '}
-              <button
-                onClick={toggleMode}
-                className="hover:underline font-medium transition-all"
-                style={{ color: 'hsl(199, 89%, 48%)' }}
+            </Link>
+            <Link href="/auth">
+              <Button
+                size="lg"
+                variant="outline"
+                className="text-base px-8"
+                style={{
+                  borderColor: 'hsl(220, 20%, 18%)',
+                  color: 'hsl(210, 40%, 98%)',
+                  backgroundColor: 'transparent'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = 'hsl(220, 20%, 14% / 0.5)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                }}
               >
-                {isSignUp ? 'Sign in' : 'Sign up'}
-              </button>
-            </div>
-          </CardContent>
-        </Card>
+                Sign In
+              </Button>
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );
