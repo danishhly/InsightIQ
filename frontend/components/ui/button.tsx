@@ -29,19 +29,15 @@ export const Button: React.FC<ButtonProps> = ({
     md: 'px-4 py-2 text-base',
     lg: 'px-6 py-3 text-lg',
   };
-
-  // Handle size prop
+  
   const sizeClass = sizes[size] || sizes.md;
   
   return (
-    const sizeClass = sizes[size] || sizes.md;
-    
-    return (
-      <button
-        className={`${baseStyles} ${variants[variant]} ${sizeClass} ${className} ${disabled || isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-        disabled={disabled || isLoading}
-        {...props}
-      >
+    <button
+      className={`${baseStyles} ${variants[variant]} ${sizeClass} ${className} ${disabled || isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+      disabled={disabled || isLoading}
+      {...props}
+    >
       {isLoading ? (
         <span className="flex items-center">
           <svg className="animate-spin -ml-1 mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24">
@@ -53,6 +49,6 @@ export const Button: React.FC<ButtonProps> = ({
       ) : (
         children
       )}
-      </button>
-    );
-  };
+    </button>
+  );
+};
