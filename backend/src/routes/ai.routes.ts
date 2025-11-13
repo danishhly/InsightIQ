@@ -209,11 +209,21 @@ router.post('/generate-insight', authenticate, async (req: AuthRequest, res) => 
       });
     }
 
+    // Ensure data is in correct format
+    let formattedData = data;
+    if (data && data.labels && data.datasets) {
+      // Chart data format from chart service
+      formattedData = data;
+    } else if (Array.isArray(data)) {
+      // Raw data array
+      formattedData = { data };
+    }
+
     const insight = await insightService.generateChartInsight({
       userId: req.userId,
       chartId: chartId || null,
       chartType,
-      data,
+      data: formattedData,
       columns,
     });
 
