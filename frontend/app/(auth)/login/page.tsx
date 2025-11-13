@@ -4,10 +4,10 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card } from '@/components/ui/card';
 import { authApi } from '@/lib/api/auth';
 import { useAuthStore } from '@/lib/store/authStore';
-import { Brain } from 'lucide-react';
+import { Brain, Zap, ArrowRight } from 'lucide-react';
+import Link from 'next/link';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -34,67 +34,133 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#0f0f23] py-12 px-4 sm:px-6 lg:px-8">
-      <Card className="w-full max-w-md border-[#2a2a3e]">
-        <div className="text-center mb-6">
-          <div className="flex justify-center mb-4">
-            <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center">
-              <Brain className="w-10 h-10 text-white" />
+    <div className="min-h-screen bg-black flex flex-col">
+      {/* Header */}
+      <header className="w-full px-6 py-4 flex items-center justify-between border-b border-[#1a1a2e]">
+        <div className="flex items-center space-x-3">
+          <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
+            <Brain className="w-6 h-6 text-black" />
+          </div>
+          <span className="text-white text-xl font-semibold">InsightIQ</span>
+        </div>
+        <nav className="hidden md:flex items-center space-x-8">
+          <Link href="/features" className="text-[#a0a0b0] hover:text-white transition-colors">
+            Features
+          </Link>
+          <Link href="/platform" className="text-[#a0a0b0] hover:text-white transition-colors">
+            Platform
+          </Link>
+          <Link href="/about" className="text-[#a0a0b0] hover:text-white transition-colors">
+            About
+          </Link>
+        </nav>
+        <div className="flex items-center space-x-4">
+          <Link href="/register" className="text-[#a0a0b0] hover:text-white transition-colors">
+            Sign Up
+          </Link>
+          <Button variant="outline" className="border-white/20 text-white hover:bg-white/10">
+            <Zap className="w-4 h-4 mr-2" />
+            Join Free Beta
+          </Button>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="flex-1 flex items-center justify-center px-4 py-12">
+        <div className="w-full max-w-md">
+          {/* New Badge */}
+          <div className="flex justify-center mb-6">
+            <div className="inline-flex items-center space-x-2 bg-[#1a1a2e] px-4 py-2 rounded-full border border-[#2a2a3e]">
+              <span className="text-xs font-semibold text-white bg-gradient-to-r from-blue-500 to-teal-500 bg-clip-text text-transparent">
+                New
+              </span>
+              <span className="text-xs text-[#a0a0b0]">Free beta now available</span>
             </div>
           </div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
-            InsightIQ
-          </h1>
-          <p className="mt-2 text-[#a0a0b0]">Sign in to your account</p>
-        </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {errors.general && (
-            <div className="bg-red-500/10 border border-red-500/50 text-red-400 px-4 py-3 rounded-lg">
-              {errors.general}
+          {/* Gradient Card */}
+          <div className="relative bg-gradient-to-r from-blue-600 via-blue-500 to-teal-500 rounded-2xl p-8 shadow-2xl">
+            <div className="space-y-6">
+              <div className="text-center space-y-4">
+                <h1 className="text-4xl md:text-5xl font-bold text-white leading-tight">
+                  Welcome back to InsightIQ
+                </h1>
+                <p className="text-lg text-white/90">
+                  Sign in to access your analytics dashboard
+                </p>
+              </div>
+
+              <form onSubmit={handleSubmit} className="space-y-4">
+                {errors.general && (
+                  <div className="bg-red-500/20 border border-red-500/50 text-red-300 px-4 py-3 rounded-lg text-sm">
+                    {errors.general}
+                  </div>
+                )}
+
+                <div>
+                  <Input
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    error={errors.email}
+                    required
+                    placeholder="Email address"
+                    className="bg-white/10 border-white/20 text-white placeholder:text-white/60 focus:border-white/40"
+                  />
+                </div>
+
+                <div>
+                  <Input
+                    type="password"
+                    value={formData.password}
+                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                    error={errors.password}
+                    required
+                    placeholder="Password"
+                    className="bg-white/10 border-white/20 text-white placeholder:text-white/60 focus:border-white/40"
+                  />
+                </div>
+
+                <Button
+                  type="submit"
+                  isLoading={isLoading}
+                  className="w-full bg-white text-blue-600 hover:bg-white/90 font-semibold py-3 text-lg border-0"
+                >
+                  {!isLoading && (
+                    <>
+                      <Zap className="w-5 h-5 mr-2" />
+                      Sign In
+                    </>
+                  )}
+                </Button>
+              </form>
+
+              <div className="text-center">
+                <p className="text-white/80 text-sm">
+                  Don't have an account?{' '}
+                  <Link href="/register" className="text-white font-semibold hover:underline">
+                    Sign up free
+                  </Link>
+                </p>
+              </div>
             </div>
-          )}
-
-          <Input
-            label="Email"
-            type="email"
-            value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            error={errors.email}
-            required
-            placeholder="you@example.com"
-          />
-
-          <Input
-            label="Password"
-            type="password"
-            value={formData.password}
-            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-            error={errors.password}
-            required
-            placeholder="••••••••"
-          />
-
-          <Button
-            type="submit"
-            variant="primary"
-            size="lg"
-            isLoading={isLoading}
-            className="w-full"
-          >
-            Sign In
-          </Button>
-        </form>
-
-        <div className="mt-6 text-center">
-          <p className="text-sm text-[#a0a0b0]">
-            Don't have an account?{' '}
-            <a href="/register" className="text-indigo-400 hover:text-indigo-300 font-medium">
-              Sign up
-            </a>
-          </p>
+          </div>
         </div>
-      </Card>
+      </main>
+
+      {/* Footer */}
+      <footer className="w-full px-6 py-8 border-t border-[#1a1a2e]">
+        <div className="max-w-6xl mx-auto">
+          <p className="text-center text-[#a0a0b0] text-xs mb-6">BACKED BY THE BEST</p>
+          <div className="flex items-center justify-center space-x-8 flex-wrap gap-4">
+            <span className="text-white font-bold text-sm">FOX</span>
+            <span className="text-white font-semibold text-sm">DIGITAL JOURNAL</span>
+            <span className="text-white font-semibold text-sm">MarketWatch</span>
+            <span className="text-white font-semibold text-sm">BENZINGA</span>
+            <span className="text-white font-semibold text-xs">azcentral.</span>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
