@@ -25,7 +25,7 @@ export default function DashboardLayout({
   }
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-[#0f0f23] overflow-hidden">
       <Sidebar />
       <div className="flex-1 flex flex-col overflow-hidden">
         <TopNavbar />
@@ -36,4 +36,3 @@ export default function DashboardLayout({
     </div>
   );
 }
-
