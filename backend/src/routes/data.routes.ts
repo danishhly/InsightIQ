@@ -77,11 +77,33 @@ router.get('/', authenticate, async (req: AuthRequest, res) => {
 
     const datasets = await dataService.getUserDatasets(req.userId);
 
+    // Clean up data for JSON serialization
+    const cleanedDatasets = datasets.map((dataset) => ({
+      id: dataset.id,
+      userId: dataset.userId,
+      name: dataset.name,
+      fileName: dataset.fileName,
+      fileType: dataset.fileType,
+      rowCount: dataset.rowCount,
+      columnCount: dataset.columnCount,
+      schema: dataset.schema || [],
+      createdAt: dataset.createdAt.toISOString(),
+      tables: dataset.tables.map((table) => ({
+        id: table.id,
+        datasetId: table.datasetId,
+        tableName: table.tableName,
+        columns: table.columns || [],
+        // Don't send full data, just metadata
+        rowCount: Array.isArray(table.data) ? table.data.length : 0,
+      })),
+    }));
+
     res.json({
       success: true,
-      data: datasets,
+      data: cleanedDatasets,
     });
   } catch (error: any) {
+    console.error('Error in GET /api/data:', error);
     res.status(500).json({
       success: false,
       error: {

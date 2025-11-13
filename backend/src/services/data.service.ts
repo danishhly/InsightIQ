@@ -119,11 +119,22 @@ export class DataService {
    * Get all datasets for a user
    */
   async getUserDatasets(userId: string): Promise<DatasetWithTables[]> {
-    return prisma.dataset.findMany({
-      where: { userId },
-      include: { tables: true },
-      orderBy: { createdAt: 'desc' },
-    });
+    try {
+      const datasets = await prisma.dataset.findMany({
+        where: { userId },
+        include: { tables: true },
+        orderBy: { createdAt: 'desc' },
+      });
+
+      // Ensure schema is properly serialized
+      return datasets.map((dataset) => ({
+        ...dataset,
+        schema: dataset.schema || [],
+      }));
+    } catch (error: any) {
+      console.error('Error getting user datasets:', error);
+      throw new Error(`Failed to get datasets: ${error.message}`);
+    }
   }
 
   /**
