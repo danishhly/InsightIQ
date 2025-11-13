@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { authApi } from '@/lib/api/auth';
 import { useAuthStore } from '@/lib/store/authStore';
+import { Brain } from 'lucide-react';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -33,16 +34,23 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-[#0f0f23] py-12 px-4 sm:px-6 lg:px-8">
+      <Card className="w-full max-w-md border-[#2a2a3e]">
         <div className="text-center mb-6">
-          <h1 className="text-3xl font-bold text-gray-900">InsightIQ</h1>
-          <p className="mt-2 text-gray-600">Create your account</p>
+          <div className="flex justify-center mb-4">
+            <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center">
+              <Brain className="w-10 h-10 text-white" />
+            </div>
+          </div>
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
+            InsightIQ
+          </h1>
+          <p className="mt-2 text-[#a0a0b0]">Create your account</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {errors.general && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+            <div className="bg-red-500/10 border border-red-500/50 text-red-400 px-4 py-3 rounded-lg">
               {errors.general}
             </div>
           )}
@@ -89,9 +97,9 @@ export default function RegisterPage() {
         </form>
 
         <div className="mt-6 text-center">
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-[#a0a0b0]">
             Already have an account?{' '}
-            <a href="/login" className="text-blue-600 hover:text-blue-500 font-medium">
+            <a href="/login" className="text-indigo-400 hover:text-indigo-300 font-medium">
               Sign in
             </a>
           </p>
@@ -100,4 +108,3 @@ export default function RegisterPage() {
     </div>
   );
 }
-
