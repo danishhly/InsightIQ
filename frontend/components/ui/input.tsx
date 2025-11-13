@@ -19,9 +19,24 @@ export const Input: React.FC<InputProps> = ({
         </label>
       )}
       <input
-        className={`w-full px-4 py-2 bg-[#0f0f23] border border-[#2a2a3e] rounded-lg text-white placeholder-[#a0a0b0] focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 ${
+        className={`w-full h-10 px-4 rounded-lg border focus:outline-none focus:ring-2 transition-all ${
           error ? 'border-red-500' : ''
         } ${className}`}
+        style={{
+          backgroundColor: 'hsl(220, 20%, 14%)',
+          borderColor: error ? 'hsl(0, 84%, 60%)' : 'hsl(220, 20%, 18%)',
+          color: 'hsl(210, 40%, 98%)',
+        }}
+        onFocus={(e) => {
+          if (!error) {
+            e.target.style.borderColor = 'hsl(199, 89%, 48%)';
+            e.target.style.boxShadow = '0 0 0 2px hsl(199, 89%, 48% / 0.2)';
+          }
+        }}
+        onBlur={(e) => {
+          e.target.style.borderColor = error ? 'hsl(0, 84%, 60%)' : 'hsl(220, 20%, 18%)';
+          e.target.style.boxShadow = 'none';
+        }}
         {...props}
       />
       {error && (

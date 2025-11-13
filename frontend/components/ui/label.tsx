@@ -1,0 +1,18 @@
+import React from 'react';
+
+interface LabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
+  children: React.ReactNode;
+}
+
+export const Label: React.FC<LabelProps> = ({ children, className = '', ...props }) => {
+  return (
+    <label
+      className={`text-sm font-medium block ${className}`}
+      style={{ color: 'hsl(210, 40%, 98%)' }}
+      {...props}
+    >
+      {children}
+    </label>
+  );
+};
+
