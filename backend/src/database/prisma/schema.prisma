@@ -1,0 +1,131 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  passwordHash  String
+  name          String?
+  role          Role     @default(ANALYST)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  datasets      Dataset[]
+  charts        Chart[]
+  insights      Insight[]
+  queries       Query[]
+
+  @@map("users")
+}
+
+model Dataset {
+  id            String   @id @default(uuid())
+  userId        String
+  name          String
+  fileName      String
+  fileType      String   // csv, xlsx
+  rowCount      Int
+  columnCount   Int
+  schema        Json     // Column metadata
+  createdAt     DateTime @default(now())
+
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tables        DataTable[]
+  charts        Chart[]
+
+  @@map("datasets")
+}
+
+model DataTable {
+  id            String   @id @default(uuid())
+  datasetId     String
+  tableName     String
+  columns       Json     // Column definitions
+  data          Json?    // Actual data (or reference to storage)
+
+  dataset       Dataset  @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+
+  @@map("data_tables")
+}
+
+model Chart {
+  id            String   @id @default(uuid())
+  userId        String
+  datasetId     String
+  name          String
+  type          ChartType  // bar, line, pie, etc.
+  config        Json     // Chart configuration
+  query         String?  // SQL query used
+  createdAt     DateTime @default(now())
+
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dataset       Dataset  @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+  insights      Insight[]
+
+  @@map("charts")
+}
+
+model Insight {
+  id            String   @id @default(uuid())
+  userId        String
+  chartId       String?
+  content       String   // AI-generated insight text
+  type          InsightType  // summary, anomaly, trend
+  metadata      Json?
+  createdAt     DateTime @default(now())
+
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  chart         Chart?   @relation(fields: [chartId], references: [id], onDelete: SetNull)
+
+  @@map("insights")
+}
+
+model Query {
+  id            String   @id @default(uuid())
+  userId        String
+  naturalQuery  String   // User's natural language query
+  sqlQuery      String   // Generated SQL
+  result        Json?    // Query result
+  executedAt    DateTime @default(now())
+
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("queries")
+}
+
+enum Role {
+  ADMIN
+  ANALYST
+  VIEWER
+
+  @@map("role")
+}
+
+enum ChartType {
+  BAR
+  LINE
+  PIE
+  SCATTER
+  AREA
+
+  @@map("chart_type")
+}
+
+enum InsightType {
+  SUMMARY
+  TREND
+  ANOMALY
+  COMPARISON
+
+  @@map("insight_type")
+}
+
