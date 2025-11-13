@@ -5,6 +5,8 @@ import { connectDatabase } from './config/database.config';
 import authRoutes from './routes/auth.routes';
 import userRoutes from './routes/users.routes';
 import dataRoutes from './routes/data.routes';
+import chartRoutes from './routes/charts.routes';
+import queryRoutes from './routes/query.routes';
 
 // Load environment variables
 dotenv.config();
@@ -29,6 +31,8 @@ app.get('/health', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/data', dataRoutes);
+app.use('/api/charts', chartRoutes);
+app.use('/api/query', queryRoutes);
 
 // Error handling middleware
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
