@@ -1,5 +1,7 @@
 # InsightIQ - Project Structure & Design Analysis
 
+## Generated with the help of AI
+
 ## 📋 Executive Summary
 
 **Project Name:** InsightIQ - AI-Powered Business Intelligence Dashboard  
